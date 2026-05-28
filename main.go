@@ -113,10 +113,10 @@ func getStats(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func main() {
-	http.HandleFunc("/transaction/create", ReqHandler)
-	http.HandleFunc("/transaction/stats", getStats)
-	http.HandleFunc("/transaction/", getTxnId) // for /transaction/:id
-	http.ListenAndServe(":8080", nil)
+// func main() {
+// 	http.HandleFunc("/transaction/create", ReqHandler)
+// 	http.HandleFunc("/transaction/stats", getStats)
+// 	http.HandleFunc("/transaction/", getTxnId) // for /transaction/:id
+// 	http.ListenAndServe(":8080", nil)
 
-}
+// }

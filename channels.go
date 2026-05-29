@@ -35,7 +35,7 @@ ch1<-true
 wg.Wait()
 }
 
-func main() {
+func main3() {
 	var x int = 0
 	ch1 := make(chan int)
 	ch2 := make(chan int)

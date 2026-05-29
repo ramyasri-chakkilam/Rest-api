@@ -83,7 +83,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 }
 
-func main() {
-	http.HandleFunc("/users", handler)
-	http.ListenAndServe(":8080", nil)
-}
+// func main() {
+// 	http.HandleFunc("/users", handler)
+// 	http.ListenAndServe(":8080", nil)
+// }

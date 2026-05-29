@@ -7,50 +7,50 @@ import (
 	"sync"
 )
 
-type Todo struct {
+type x struct {
 	Work string `json:"work"`
 	ID   string `json:"id"`
 }
 
-var todos = []Todo{
+var y = []x{
 	{Work: "clean room", ID: "ramya"},
 	{Work: "sing a song", ID: "mahira"},
 }
 
 var mu sync.Mutex
 
-func getTodos(w http.ResponseWriter, r *http.Request) {
+func handlerGet(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(todos)
+	json.NewEncoder(w).Encode(y)
 }
 
-func createTodo(w http.ResponseWriter, r *http.Request) {
-	var todo Todo
-	if err := json.NewDecoder(r.Body).Decode(&todo); err != nil {
+func createHandler(w http.ResponseWriter, r *http.Request) {
+	var z x
+	if err := json.NewDecoder(r.Body).Decode(&z); err != nil {
 		http.Error(w, "Invalid Request", http.StatusBadRequest)
 		return
 	}
 
 	mu.Lock()
-	todos = append(todos, todo)
+	y = append(y, z)
 	mu.Unlock()
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(todo)
+	json.NewEncoder(w).Encode(z)
 }
 
-func updateTodo(w http.ResponseWriter, r *http.Request, id string) {
+func putWork(w http.ResponseWriter, r *http.Request, id string) {
 	if id == "" {
 		http.Error(w, "id is required", http.StatusBadRequest)
 		return
 	}
 
-	var updatedTodo Todo
-	if err := json.NewDecoder(r.Body).Decode(&updatedTodo); err != nil {
+	var updatedWork x
+	if err := json.NewDecoder(r.Body).Decode(&updatedWork); err != nil {
 		http.Error(w, "Invalid Request", http.StatusBadRequest)
 		return
 	}
@@ -58,13 +58,13 @@ func updateTodo(w http.ResponseWriter, r *http.Request, id string) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	for i, todo := range todos {
-		if todo.ID == id {
-			updatedTodo.ID = id
-			todos[i] = updatedTodo
+	for i, xx := range y {
+		if xx.ID == id {
+			updatedWork.ID = id
+			y[i] = updatedWork
 
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(updatedTodo)
+			json.NewEncoder(w).Encode(updatedWork)
 			return
 		}
 	}
@@ -72,7 +72,7 @@ func updateTodo(w http.ResponseWriter, r *http.Request, id string) {
 	http.Error(w, "todo not found", http.StatusNotFound)
 }
 
-func deleteTodo(w http.ResponseWriter, r *http.Request, id string) {
+func deletList(w http.ResponseWriter, r *http.Request, id string) {
 	if id == "" {
 		http.Error(w, "id is required", http.StatusBadRequest)
 		return
@@ -81,9 +81,9 @@ func deleteTodo(w http.ResponseWriter, r *http.Request, id string) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	for i, todo := range todos {
-		if todo.ID == id {
-			todos = append(todos[:i], todos[i+1:]...)
+	for i, xx := range y {
+		if xx.ID == id {
+			y = append(y[:i], y[i+1:]...)
 
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(map[string]string{
@@ -99,22 +99,22 @@ func deleteTodo(w http.ResponseWriter, r *http.Request, id string) {
 func todosHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		getTodos(w, r)
+		handlerGet(w, r)
 	case "POST":
-		createTodo(w, r)
+		createHandler(w, r)
 	default:
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 	}
 }
 
 func todoByIDHandler(w http.ResponseWriter, r *http.Request) {
-	id := strings.TrimPrefix(r.URL.Path, "/todos/")
+	id:=strings.TrimPrefix(r.URL.Path, "/todos/")
 
 	switch r.Method {
 	case "PUT":
-		updateTodo(w, r, id)
+		putWork(w, r, id)
 	case "DELETE":
-		deleteTodo(w, r, id)
+		deletList(w, r, id)
 	default:
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 	}

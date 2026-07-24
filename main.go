@@ -120,7 +120,7 @@ func todoByIDHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func main() {
+func main0() {
 	http.HandleFunc("/todos", todosHandler)
 	http.HandleFunc("/todos/", todoByIDHandler)
 	http.ListenAndServe(":8080", nil)

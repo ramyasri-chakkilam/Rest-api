@@ -183,7 +183,7 @@ func getAllStocks(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func main() {
+func main2() {
 	http.HandleFunc("/stock", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/stock" {
 			http.NotFound(w, r)
